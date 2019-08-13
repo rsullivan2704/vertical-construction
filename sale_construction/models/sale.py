@@ -1,5 +1,6 @@
 from odoo import api, fields, models, _
 
+
 class SaleOrder(models.Model):
     _inherit = ['sale.order']
     _description = 'Proposal'
@@ -12,52 +13,52 @@ class SaleOrder(models.Model):
         help="Location of the property where works are to be performed.")
 
     property_owner = fields.Many2one(
-        'res.partner', 
-        string='Property Owner', 
-        readonly=True, 
-        states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
-        required=True, 
+        'res.partner',
+        string='Property Owner',
+        readonly=True,
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
+        required=True,
         track_visibility='onchange')
 
     architect = fields.Many2one(
-        'res.partner', 
-        string='Architect', 
-        readonly=True, 
-        states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
-        required=True, 
-        index=True, 
+        'res.partner',
+        string='Architect',
+        readonly=True,
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
+        required=True,
+        index=True,
         track_visibility='always')
 
     struct_engineer = fields.Many2one(
-        'res.partner', 
-        string='Structural Engineer', 
-        readonly=True, 
-        states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
-        required=False, 
+        'res.partner',
+        string='Structural Engineer',
+        readonly=True,
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
+        required=False,
         track_visibility='onchange')
 
     geo_engineer = fields.Many2one(
-        'res.partner', 
-        string='Geotechnical Engineer', 
-        readonly=True, 
-        states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
-        required=False, 
+        'res.partner',
+        string='Geotechnical Engineer',
+        readonly=True,
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
+        required=False,
         track_visibility='onchange')
 
     mep_engineer = fields.Many2one(
-        'res.partner', 
-        string='MEP Engineer', 
-        readonly=True, 
-        states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
-        required=False, 
+        'res.partner',
+        string='MEP Engineer',
+        readonly=True,
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
+        required=False,
         track_visibility='onchange')
 
     interior_designer = fields.Many2one(
-        'res.partner', 
-        string='Interior Designer', 
-        readonly=True, 
-        states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
-        required=False, 
+        'res.partner',
+        string='Interior Designer',
+        readonly=True,
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
+        required=False,
         track_visibility='onchange')
 
 # endregion
@@ -76,8 +77,6 @@ def onchange_partner_id(self):
             'property_owner': False,
         })
         return
-
-    addr = self.partner_id.address_get(['delivery', 'invoice'])
     values = {
         'property_owner': self.partner_id
     }
