@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_partner_category_architect" model="res.partner.category">
+        <field name="name">Architect</field>
+    </record>
+    <record id="res_partner_category_structural_engineer" model="res.partner.category">
+        <field name="name">Structural Engineer</field>
+    </record>
+    <record id="res_partner_category_geotechnical_engineer" model="res.partner.category">
+        <field name="name">Geotechnical Engineer</field>
+    </record>
+    <record id="res_partner_category_mep_engineer" model="res.partner.category">
+        <field name="name">MEP Engineer</field>
+    </record>
+    <record id="res_partner_category_interior_designer" model="res.partner.category">
+        <field name="name">Interior Designer</field>
+    </record>
+</odoo>

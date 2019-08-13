@@ -3,9 +3,17 @@
 <!-- region enable multiple addresses -->
     <record model="sale.config.settings" id="sale_config_settings_sale_construction">
         <field name="group_sale_delivery_address" eval="1"/>
+        <field name="group_sale_layout" eval="1"/>
     </record>
     <function model="sale.config.settings" name="execute">
         <!-- ids =  --><value eval="[ref('sale_config_settings_sale_construction')]"/>
+        <!-- context --><value eval="{}"/>
+    </function>
+    <record model="account.config.settings" id="account_config_settings_sale_construction">
+        <field name="group_analytic_account_for_sales" eval="1"/>
+    </record>
+    <function model="account.config.settings" name="execute">
+        <!-- ids =  --><value eval="[ref('account_config_settings_sale_construction')]"/>
         <!-- context --><value eval="{}"/>
     </function>
 <!-- endregion -->
@@ -21,11 +29,17 @@
                 <field name="partner_shipping_id" domain="[('parent_id', '=', property_owner)]" groups="sale.group_delivery_invoice_address" context="{'default_type':'delivery'}"/>
             </xpath>
             <xpath expr="//field[@name='partner_shipping_id']" position="after">
-                <field name="architect"/>
-                <field name="struct_engineer"/>
-                <field name="geo_engineer"/>
-                <field name="mep_engineer"/>
-                <field name="interior_designer"/>
+                <field name="architect" domain="[('category_id', '=', %(sale_construction.res_partner_category_architect)d)]"/>
+            </xpath>
+            <xpath expr="//page[1]" position="after">
+                <page name="resp_entities" string="Responsible Entities">
+                    <group>
+                        <field name="struct_engineer" domain="[('category_id', '=', %(sale_construction.res_partner_category_structural_engineer)d)]"/>
+                        <field name="geo_engineer" domain="[('category_id', '=', %(sale_construction.res_partner_category_geotechnical_engineer)d)]"/>
+                        <field name="mep_engineer" domain="[('category_id', '=', %(sale_construction.res_partner_category_mep_engineer)d)]"/>
+                        <field name="interior_designer" domain="[('category_id', '=', %(sale_construction.res_partner_category_interior_designer)d)]"/>
+                    </group>
+                </page>
             </xpath>
         </field>
     </record>

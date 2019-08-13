@@ -26,6 +26,7 @@ Construction contractors have specific needs with respect to information related
 
     # always loaded
     'data': [
+        'data/sale_construction_data.xml',
         'views/sale_views.xml',
         # 'data/mailpiece_rule_category_data.xml',
         # 'data/mailpiece_rule_data.xml',
