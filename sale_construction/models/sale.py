@@ -65,22 +65,39 @@ class SaleOrder(models.Model):
 
 # region methods
 
-@api.multi
-@api.onchange('partner_id')
-def onchange_partner_id(self):
-    """
-    Update the following fields when the partner is changed:
-    - Property Owner
-    """
-    if not self.partner_id:
-        self.update({
-            'property_owner': False,
-        })
-        return
-    values = {
-        'property_owner': self.partner_id
-    }
-    self.update(values)
-    super(SaleOrder, self).onchange_partner_id()
+    @api.multi
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        """
+        Update the following fields when the partner is changed:
+        - property_owner
+        """
+        super(SaleOrder, self).onchange_partner_id()
+        if not self.partner_id:
+            self.update({
+                'property_owner': False,
+            })
+            return
+        values = {
+            'property_owner': self.partner_id
+        }
+        self.update(values)
+
+    @api.multi
+    @api.onchange('property_owner')
+    def onchange_property_owner(self):
+        '''
+        Update the following fields when the property owner is changed:
+        - partner_shipping_id
+        '''
+        if not self.property_owner:
+            self.update({
+                'partner_shipping_id': False
+            })
+            return
+        values = {
+            'partner_shipping_id': self.property_owner
+        }
+        self.update(values)
 
 # endregion

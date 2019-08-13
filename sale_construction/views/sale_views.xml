@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+<!-- region enable multiple addresses -->
+    <record model="sale.config.settings" id="sale_config_settings_sale_construction">
+        <field name="group_sale_delivery_address" eval="1"/>
+    </record>
+    <function model="sale.config.settings" name="execute">
+        <!-- ids =  --><value eval="[ref('sale_config_settings_sale_construction')]"/>
+        <!-- context --><value eval="{}"/>
+    </function>
+<!-- endregion -->
     <record id="sale_order_form_inherit_sale_construction" model="ir.ui.view">
         <field name="name">sale_construction.sale.order.form</field>
         <field name="model">sale.order</field>
@@ -7,6 +16,9 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='partner_shipping_id']" position="before">
                 <field name="property_owner"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_shipping_id']" position="replace">
+                <field name="partner_shipping_id" domain="[('parent_id', '=', property_owner)]" groups="sale.group_delivery_invoice_address" context="{'default_type':'delivery'}"/>
             </xpath>
             <xpath expr="//field[@name='partner_shipping_id']" position="after">
                 <field name="architect"/>
