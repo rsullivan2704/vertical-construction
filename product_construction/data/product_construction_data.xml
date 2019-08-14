@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_uom_categ_area" model="product.uom.categ">
+        <field name="name">Area</field>
+    </record>
+    <record id="product_uom_sqm" model="product.uom">
+        <field name="name">sq m</field>
+        <field name="category_id" ref="product_uom_categ_area"/>
+        <field name="uom_type">reference</field>
+    </record>
+    <record id="product_uom_sqft" model="product.uom">
+        <field name="name">sq ft</field>
+        <field name="category_id" ref="product_uom_categ_area"/>
+        <field name="uom_type">smaller</field>
+        <field name="factor">0.09290</field>
+    </record>
+    <record id="product_uom_sqyd" model="product.uom">
+        <field name="name">sq yd</field>
+        <field name="category_id" ref="product_uom_categ_area"/>
+        <field name="uom_type">smaller</field>
+        <field name="factor">0.836127</field>
+    </record>
+</odoo>
