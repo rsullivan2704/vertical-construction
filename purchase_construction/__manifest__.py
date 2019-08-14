@@ -1,24 +1,24 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Sale Construction Module",
+    'name': "Purchase Construction Module",
     'version': '10.0.0.0.0',
     'author': "Robert J Sullivan",
     'website': "http://www.keystonetileandstone.com",
     'license': 'AGPL-3',
-    'category': 'Sales',
+    'category': 'Purchases',
     'summary': """
-This module modifies sales views and models to better serve the needs
-of a construction contracting company.
+This module modifies purhcase views and models to better serve
+the needs of a construction contracting company.
     """,
     'description': """
-Construction contractors have specific needs with respect to information 
-elated to the sale of services and materials needed for projects.
+Construction contractors have specific needs with respect to information
+related to the purchase of services and materials needed for projects.
     """,
     'version': '10.0.0.0.0',
     'application': False,
 
     # any module necessary for this one to work correctly
-    'depends': ['sale', 'document'],
+    'depends': ['purchase', 'document'],
 
     # any external dependencies for this one to work correctly
     'external_dependencies': {
@@ -27,8 +27,8 @@ elated to the sale of services and materials needed for projects.
 
     # always loaded
     'data': [
-        'data/sale_construction_data.xml',
-        'views/sale_views.xml',
+        # 'data/purchase_construction_data.xml',
+        # 'views/purchase_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
