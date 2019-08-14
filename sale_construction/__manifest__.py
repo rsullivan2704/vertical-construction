@@ -11,14 +11,14 @@ This module modifies sales views and models to better serve the needs
 of a construction contracting company.
     """,
     'description': """
-Construction contractors have specific needs with respect to information 
+Construction contractors have specific needs with respect to information
 elated to the sale of services and materials needed for projects.
     """,
     'version': '10.0.0.0.0',
     'application': False,
 
     # any module necessary for this one to work correctly
-    'depends': ['sale', 'document'],
+    'depends': ['sale', 'document', 'crm_construction'],
 
     # any external dependencies for this one to work correctly
     'external_dependencies': {
@@ -27,7 +27,6 @@ elated to the sale of services and materials needed for projects.
 
     # always loaded
     'data': [
-        'data/sale_construction_data.xml',
         'views/sale_views.xml',
     ],
     # only loaded in demonstration mode
