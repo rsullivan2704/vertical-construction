@@ -27,7 +27,7 @@ information related to their customers.
 
     # always loaded
     'data': [
-        # 'data/crm_construction_data.xml',
+        'data/crm_construction_data.xml',
         # 'views/crm_views.xml',
     ],
     # only loaded in demonstration mode
