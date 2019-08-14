@@ -7,6 +7,26 @@ class SaleOrder(models.Model):
 
 # region fields
 
+    state = fields.Selection([
+            ('draft', 'Proposal'),
+            ('sent', 'Proposal Sent'),
+            ('sale', 'Awarded'),
+            ('done', 'Locked'),
+            ('cancel', 'Cancelled'),
+        ],
+        string='Status',
+        readonly=True,
+        copy=False,
+        index=True,
+        track_visibility='onchange',
+        default='draft')
+
+    attachments = fields.Many2many(
+        string=u'Documents',
+        comodel_name='ir.attachment',
+        compute='compute_attachments'
+    )
+
     partner_shipping_id = fields.Many2one(
         'res.partner',
         string='Property Address',
@@ -64,6 +84,16 @@ class SaleOrder(models.Model):
 # endregion
 
 # region methods
+
+    @api.multi
+    def compute_attachments(self):
+        attachment_model = self.env['ir.attachment']
+        self.attachments = attachment_model.search(
+            [
+                ('res_model', '=', 'sale.order'),
+                ('res_id', '=', self.id),
+                ('type', 'in', ('binary', 'url'))
+            ])
 
     @api.multi
     @api.onchange('partner_id')

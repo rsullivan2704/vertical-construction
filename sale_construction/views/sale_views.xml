@@ -17,6 +17,19 @@
         <!-- context --><value eval="{}"/>
     </function>
 <!-- endregion -->
+    <record id="view_quotation_tree_inherit_sale_construction" model="ir.ui.view">
+        <field name="name">sale_construction.sale.order.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="string">Proposal</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="string">Proposal Number</attribute>
+            </xpath>
+        </field>
+    </record>
     <record id="sale_order_form_inherit_sale_construction" model="ir.ui.view">
         <field name="name">sale_construction.sale.order.form</field>
         <field name="model">sale.order</field>
@@ -26,13 +39,16 @@
                 <field name="property_owner"/>
             </xpath>
             <xpath expr="//field[@name='partner_shipping_id']" position="replace">
-                <field name="partner_shipping_id" domain="[('parent_id', '=', property_owner)]" groups="sale.group_delivery_invoice_address" context="{'default_type':'delivery'}"/>
+                <field name="partner_shipping_id" domain="['&amp;', ('parent_id', '=', property_owner), ('type', 'in', ['invoice', 'delivery', 'other'])]" groups="sale.group_delivery_invoice_address" context="{'default_type':'delivery'}"/>
             </xpath>
             <xpath expr="//field[@name='partner_shipping_id']" position="after">
                 <field name="architect" domain="[('category_id', '=', %(sale_construction.res_partner_category_architect)d)]"/>
             </xpath>
+            <xpath expr="//page[1]" position="attributes">
+                <attribute name="string">BOQ</attribute>
+            </xpath>
             <xpath expr="//page[1]" position="after">
-                <page name="resp_entities" string="Responsible Entities">
+                <page name="resp_parties" string="Responsible Parties">
                     <group>
                         <field name="struct_engineer" domain="[('category_id', '=', %(sale_construction.res_partner_category_structural_engineer)d)]"/>
                         <field name="geo_engineer" domain="[('category_id', '=', %(sale_construction.res_partner_category_geotechnical_engineer)d)]"/>
@@ -41,6 +57,91 @@
                     </group>
                 </page>
             </xpath>
+            <xpath expr="//page[2]" position="after">
+                <page name="docs" string="Documents">
+                    <field name="attachments"/>
+                </page>
+            </xpath>
         </field>
     </record>
+<!-- region menus -->
+    <record id="quotation_view_search_inherit_sale_construction" model="ir.ui.view">
+        <field name="name">sale_construction.quotation.view.search</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='draft']" position="attributes">
+                <attribute name="string">Proposals</attribute> 
+            </xpath>
+            <xpath expr="//filter[@name='sent']" position="attributes">
+                <attribute name="string">Submitted Proposals</attribute> 
+            </xpath>
+            <xpath expr="//filter[@name='sales']" position="attributes">
+                <attribute name="string">Awarded Proposals</attribute> 
+            </xpath>
+        </field>
+    </record>
+    <record id="sale.action_quotations" model="ir.actions.act_window">
+        <field name="name">Proposals</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="view_quotation_tree_inherit_sale_construction"/>
+        <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+        <field name="search_view_id" ref="quotation_view_search_inherit_sale_construction"/>
+        <field name="context">{'hide_sale': True}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Create a Proposal, the first step of a new sale.
+            </p><p>
+            Your next actions should flow efficiently: confirm the Proposal
+            to a Sale Order, then create the Invoice and collect the Payment.
+            </p><p>
+            Note that once a Proposal becomes a Sale Order, it will be moved
+            from the Proposals list to the Sales Order list.
+            </p>
+        </field>
+    </record>
+    <menuitem id="sale.menu_sale_quotations"
+        name="Proposals"
+        action="sale.action_quotations" 
+        parent="sales_team.menu_sales"
+        sequence="11"/>
+    <record id="sale.action_quotations_salesteams" model="ir.actions.act_window">
+        <field name="name">Proposals</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="view_quotation_tree_inherit_sale_construction"/>
+        <field name="view_mode">tree,form,calendar,graph</field>
+        <field name="context">{
+                'hide_sale': True,
+                'search_default_team_id': [active_id],
+                'default_team_id': active_id,
+                'show_address': 1,
+            }
+        </field>
+        <field name="domain">[]</field>
+        <field name="search_view_id" ref="quotation_view_search_inherit_sale_construction"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Create a Proposal, the first step of a new sale.
+            </p><p>
+            Your next actions should flow efficiently: confirm the Proposal
+            to a Sale Order, then create the Invoice and collect the Payment.
+            </p><p>
+            Note that once a Proposal becomes a Sale Order, it will be moved
+            from the Proposals list to the Sales Order list.
+            </p>
+        </field>
+    </record>
+    <record id="sale.action_order_report_quotation_salesteam" model="ir.actions.act_window">
+        <field name="name">Proposals Analysis</field>
+        <field name="res_model">sale.report</field>
+        <field name="view_mode">graph</field>
+        <field name="domain">[('state','=','draft'),('team_id', '=', active_id)]</field>
+        <field name="context">{'search_default_order_month':1}</field>
+        <field name="help">This report performs analysis on your proposals. Analysis check your sales revenues and sort it by different group criteria (salesman, partner, product, etc.) Use this report to perform analysis on sales not having invoiced yet. If you want to analyse your turnover, you should use the Invoice Analysis report in the Accounting application.</field>
+    </record>
+<!-- endregion -->
 </odoo>

@@ -17,7 +17,7 @@ Construction contractors have specific needs with respect to information related
 
     # any module necessary for this one to work correctly
     # 'depends': ['report_wkhtmltopdf_param', 'website', 'web_notify'],
-    'depends': ['sale'],
+    'depends': ['sale', 'document'],
 
     # any external dependencies for this one to work correctly
     'external_dependencies': {
