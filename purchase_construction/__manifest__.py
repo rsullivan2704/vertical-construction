@@ -18,7 +18,7 @@ related to the purchase of services and materials needed for projects.
     'application': False,
 
     # any module necessary for this one to work correctly
-    'depends': ['purchase', 'document'],
+    'depends': ['purchase', 'base_construction'],
 
     # any external dependencies for this one to work correctly
     'external_dependencies': {

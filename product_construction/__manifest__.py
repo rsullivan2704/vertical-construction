@@ -18,7 +18,7 @@ information related to their products and services.
     'application': False,
 
     # any module necessary for this one to work correctly
-    'depends': ['product', 'document'],
+    'depends': ['product', 'base_construction'],
 
     # any external dependencies for this one to work correctly
     'external_dependencies': {

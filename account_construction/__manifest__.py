@@ -18,7 +18,7 @@ related to the accounting of services and materials needed for projects.
     'application': False,
 
     # any module necessary for this one to work correctly
-    'depends': ['account', 'document'],
+    'depends': ['account', 'base_construction'],
 
     # any external dependencies for this one to work correctly
     'external_dependencies': {

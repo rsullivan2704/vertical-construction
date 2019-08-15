@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!-- region views -->
+    <record id="construction_document_view_tree" model="ir.ui.view">
+        <field name="model">base.construction.document</field>
+        <field name="arch" type="xml">
+            <tree string="Documents">
+                <field name="document_type"/>
+                <field name="name"/>
+                <field name="description"/>
+                <field name="datas_fname"/>
+                <field name="file_size"/>
+                <field name="create_uid"/>
+                <field name="create_date"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+    <record id="construction_document_view_form" model="ir.ui.view">
+        <field name="model">base.construction.document</field>
+        <field name="arch" type="xml">
+        
+        </field>
+    </record>
+<!-- endregion -->
+</odoo>

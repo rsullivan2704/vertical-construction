@@ -21,10 +21,9 @@ class SaleOrder(models.Model):
         track_visibility='onchange',
         default='draft')
 
-    attachments = fields.Many2many(
+    documents = fields.Many2many(
         string=u'Documents',
-        comodel_name='ir.attachment',
-        compute='compute_attachments'
+        comodel_name='base.construction.document'
     )
 
     partner_shipping_id = fields.Many2one(
@@ -85,15 +84,15 @@ class SaleOrder(models.Model):
 
 # region methods
 
-    @api.multi
-    def compute_attachments(self):
-        attachment_model = self.env['ir.attachment']
-        self.attachments = attachment_model.search(
-            [
-                ('res_model', '=', 'sale.order'),
-                ('res_id', '=', self.id),
-                ('type', 'in', ('binary', 'url'))
-            ])
+    # @api.multi
+    # def compute_attachments(self):
+    #     attachment_model = self.env['ir.attachment']
+    #     self.attachments = attachment_model.search(
+    #         [
+    #             ('res_model', '=', 'sale.order'),
+    #             ('res_id', '=', self.id),
+    #             ('type', 'in', ('binary', 'url'))
+    #         ])
 
     @api.multi
     @api.onchange('partner_id')
@@ -129,5 +128,15 @@ class SaleOrder(models.Model):
             'partner_shipping_id': self.property_owner
         }
         self.update(values)
+
+    @api.multi
+    def action_view_documents(self):
+        docs = self.mapped('documents')
+        action = self.env.ref('base_construction.construction_document_view_tree').read()[0]
+        if len(docs) > 0:
+            action['domain'] = [('id', 'in', docs.ids)]
+        else:
+            action = {'type': 'ir.actoins.act_window_close'}
+        return action
 
 # endregion

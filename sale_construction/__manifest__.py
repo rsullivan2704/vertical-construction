@@ -18,7 +18,7 @@ elated to the sale of services and materials needed for projects.
     'application': False,
 
     # any module necessary for this one to work correctly
-    'depends': ['sale', 'document', 'crm_construction'],
+    'depends': ['sale', 'crm_construction'],
 
     # any external dependencies for this one to work correctly
     'external_dependencies': {

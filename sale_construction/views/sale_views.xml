@@ -36,6 +36,15 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_documents"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-file"
+                    attrs="{'invisible': [('documents', '=', 0)]}">
+                    <field name="documents" widget="statinfo" string="Documents"/>
+                </button>
+            </xpath>
             <xpath expr="//field[@name='partner_shipping_id']" position="before">
                 <field name="property_owner"/>
             </xpath>
@@ -58,11 +67,11 @@
                     </group>
                 </page>
             </xpath>
-            <xpath expr="//page[2]" position="after">
+            <!-- <xpath expr="//page[2]" position="after">
                 <page name="docs" string="Documents">
-                    <field name="attachments" widget="many2many_kanban"/>
+                    <field name="documents"/>
                 </page>
-            </xpath>
+            </xpath> -->
         </field>
     </record>
 <!-- region menus -->
