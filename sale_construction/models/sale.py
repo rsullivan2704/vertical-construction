@@ -21,13 +21,19 @@ class SaleOrder(models.Model):
         track_visibility='onchange',
         default='draft')
 
+    # documents = fields.Many2many(
+    #     string=u'Documents',
+    #     comodel_name='base_construction.construction.document'
+    # )
+
     documents = fields.Many2many(
         string=u'Documents',
-        comodel_name='base_construction.construction.document'
+        comodel_name='ir.attachment',
+        compute='compute_documents'
     )
 
     document_count = fields.Integer(
-        compute="compute_document_count"
+        compute="compute_documents"
     )
 
     partner_shipping_id = fields.Many2one(
@@ -88,16 +94,6 @@ class SaleOrder(models.Model):
 
 # region methods
 
-    # @api.multi
-    # def compute_attachments(self):
-    #     attachment_model = self.env['ir.attachment']
-    #     self.attachments = attachment_model.search(
-    #         [
-    #             ('res_model', '=', 'sale.order'),
-    #             ('res_id', '=', self.id),
-    #             ('type', 'in', ('binary', 'url'))
-    #         ])
-
     @api.multi
     @api.onchange('partner_id')
     def onchange_partner_id(self):
@@ -136,25 +132,35 @@ class SaleOrder(models.Model):
     @api.multi
     def action_view_documents(self):
         docs = self.mapped('documents')
-        view = self.env['ir.ui.view'].search([(
-            'name', '=', 'base_construction.construction_document_view_tree')])
+        # view = self.env['ir.ui.view'].search([(
+        #     'name', '=', 'base_construction.construction_document_view_tree')])
         domain = [('id', 'in', docs.ids)]
         return {
             'type': 'ir.actions.act_window',
             'name': 'Documents',
-            'res_model': 'base_construction.construction.document',
+            'res_model': 'ir.attachment',
             'src_model': 'sale.order',
             'domain': domain,
             'target': 'current',
             'view_type': 'form',
             'view_mode': 'tree, form',
-            'view_id': view.id
+            # 'view_id': view.id
         }
 
     @api.multi
-    @api.onchange('documents')
-    def compute_document_count(self):
+    def compute_documents(self):
         for order in self:
+            attachment_model = self.env['ir.attachment']
+            order.documents = attachment_model.search(
+                [
+                    ('res_model', '=', 'sale.order'),
+                    ('res_id', '=', order.id),
+                    ('type', 'in', ('binary', 'url'))
+                ])
             order.document_count = len(order.documents)
+
+    # @api.multi
+    # @api.onchange('documents')
+    # def compute_document_count(self):
 
 # endregion
