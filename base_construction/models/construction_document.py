@@ -3,12 +3,13 @@ from odoo import fields, models, _
 
 class ConstructionDocument(models.Model):
     _inherit = ['ir.attachment']
-    _name = 'base.construction.document'
+    _name = 'base_construction.construction.document'
 
-    document_type = fields.Selection(
-        string=u'Document type',
+    content_type = fields.Selection(
+        string=u'Content Type',
         selection=[
             ('drawing', 'Drawing'),
             ('spec', 'Spec'),
-            ('other', 'Other')]
+            ('other', 'Other')],
+        oldname="document_type"
     )

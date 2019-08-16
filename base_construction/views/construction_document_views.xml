@@ -2,10 +2,11 @@
 <odoo>
 <!-- region views -->
     <record id="construction_document_view_tree" model="ir.ui.view">
-        <field name="model">base.construction.document</field>
+        <field name="name">base_construction.construction.document.view.tree</field>
+        <field name="model">base_construction.construction.document</field>
         <field name="arch" type="xml">
             <tree string="Documents">
-                <field name="document_type"/>
+                <field name="content_type"/>
                 <field name="name"/>
                 <field name="description"/>
                 <field name="datas_fname"/>
@@ -17,9 +18,26 @@
         </field>
     </record>
     <record id="construction_document_view_form" model="ir.ui.view">
-        <field name="model">base.construction.document</field>
+        <field name="name">base_construction.construction.document.view.form</field>
+        <field name="model">base_construction.construction.document</field>
+        <field name="inherit_id" ref="base.view_attachment_form"/>
+        <field name="mode">primary</field>
         <field name="arch" type="xml">
-        
+            <xpath expr="//form" position="attributes">
+                <attribute name="string">Documents</attribute>
+            </xpath>
+            <xpath expr="//field[@name='datas']" position="attributes">
+                <attribute name="string">File Name</attribute>
+            </xpath>
+            <xpath expr="//field[@name='mimetype']" position="attributes">
+                <attribute name="string">File Type</attribute>>
+            </xpath>
+            <xpath expr="//field[@name='mimetype']" position="after">
+                <field name="content_type"/>
+                <field name="public"/>
+            </xpath>
+            <xpath expr="//form/sheet/group/group[2]" position="replace"/>
+            <xpath expr="//form/sheet/group/group[4]" position="replace"/>
         </field>
     </record>
 <!-- endregion -->

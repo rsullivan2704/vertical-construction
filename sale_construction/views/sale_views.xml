@@ -36,15 +36,14 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//div[@name='button_box']" position="inside">
+            <!-- <xpath expr="//div[@name='button_box']" position="inside">
                 <button name="action_view_documents"
                     type="object"
                     class="oe_stat_button"
-                    icon="fa-file"
-                    attrs="{'invisible': [('documents', '=', 0)]}">
-                    <field name="documents" widget="statinfo" string="Documents"/>
+                    icon="fa-file">
+                    <field name="document_count" widget="statinfo" string="Documents"/>
                 </button>
-            </xpath>
+            </xpath> -->
             <xpath expr="//field[@name='partner_shipping_id']" position="before">
                 <field name="property_owner"/>
             </xpath>
@@ -67,11 +66,53 @@
                     </group>
                 </page>
             </xpath>
-            <!-- <xpath expr="//page[2]" position="after">
+            <xpath expr="//page[2]" position="after">
                 <page name="docs" string="Documents">
-                    <field name="documents"/>
+                    <field name="documents" mode="tree,kanban">
+                        <tree string="Attached Documents" editable="top">
+                            <field name="type"/>
+                            <field name="datas_fname"/>
+                            <field name="url"/>
+                            <field name="name"/>
+                            <field name="description"/>
+                            <field name="content_type"/>
+                            <field name="file_size"/>
+                            <field name="create_uid"/>
+                            <field name="create_date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </tree>
+                        <form string="Documents">
+                            <sheet>
+                                <label for="name" class="oe_edit_only"/>
+                                <h1>
+                                    <field name="name"/>
+                                </h1>
+                                <group>
+                                    <group>
+                                        <field name="type"/>
+                                        <field name="datas" string="File Name" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
+                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+                                        <field name="mimetype" string="File Type" groups="base.group_no_one"/>
+                                        <field name="content_type"/>
+                                        <field name="public"/>
+                                    </group>
+                                    <group string="History" groups="base.group_no_one">
+                                        <label for="create_uid" string="Creation"/>
+                                        <div name="creation_div">
+                                            <field name="create_uid" readonly="1" class="oe_inline"/> on
+                                            <field name="create_date" readonly="1" class="oe_inline"/>
+                                        </div>
+                                    </group>
+                                    <group name="description_group" string="Description" groups="base.group_no_one"  colspan="4">
+                                        <field name="description" nolabel="1"/>
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
                 </page>
-            </xpath> -->
+            </xpath>
         </field>
     </record>
 <!-- region menus -->

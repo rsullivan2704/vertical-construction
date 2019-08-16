@@ -23,7 +23,11 @@ class SaleOrder(models.Model):
 
     documents = fields.Many2many(
         string=u'Documents',
-        comodel_name='base.construction.document'
+        comodel_name='base_construction.construction.document'
+    )
+
+    document_count = fields.Integer(
+        compute="compute_document_count"
     )
 
     partner_shipping_id = fields.Many2one(
@@ -132,11 +136,25 @@ class SaleOrder(models.Model):
     @api.multi
     def action_view_documents(self):
         docs = self.mapped('documents')
-        action = self.env.ref('base_construction.construction_document_view_tree').read()[0]
-        if len(docs) > 0:
-            action['domain'] = [('id', 'in', docs.ids)]
-        else:
-            action = {'type': 'ir.actoins.act_window_close'}
-        return action
+        view = self.env['ir.ui.view'].search([(
+            'name', '=', 'base_construction.construction_document_view_tree')])
+        domain = [('id', 'in', docs.ids)]
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Documents',
+            'res_model': 'base_construction.construction.document',
+            'src_model': 'sale.order',
+            'domain': domain,
+            'target': 'current',
+            'view_type': 'form',
+            'view_mode': 'tree, form',
+            'view_id': view.id
+        }
+
+    @api.multi
+    @api.onchange('documents')
+    def compute_document_count(self):
+        for order in self:
+            order.document_count = len(order.documents)
 
 # endregion
